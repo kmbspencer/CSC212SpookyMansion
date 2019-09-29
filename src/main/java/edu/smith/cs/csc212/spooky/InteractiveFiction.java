@@ -32,6 +32,7 @@ public class InteractiveFiction {
 			System.out.println();
 			System.out.println("... --- ...");
 			System.out.println(here.getDescription());
+			here.visit();
 
 			// Game over after print!
 			if (here.isTerminalState()) {
@@ -63,6 +64,24 @@ public class InteractiveFiction {
 				} else {
 					continue;
 				}
+			}
+			if(action.contentEquals("q")) {
+				if(input.confirm("Are you sure you want to quit?")) {
+					return place;
+				} else {
+					continue;
+				}
+			}
+			if(action.contentEquals("escape")) {
+				if(input.confirm("Are you sure you want to quit?")) {
+					return place;
+				} else {
+					continue;
+				}
+			}
+			if(action.contentEquals("help")) {
+				System.out.println("Choose a number to go further into the mansion,\n or type \"q\", \"escape\", or \"quit\" to leave.\n");
+				continue;
 			}
 
 			// From here on out, what they typed better be a number!
@@ -96,7 +115,8 @@ public class InteractiveFiction {
 		TextInput input = TextInput.fromArgs(args);
 
 		// This is the game we're playing.
-		GameWorld game = new SpookyMansion();
+		//GameWorld game = new SpookyMansion();
+		GameWorld game = new SpookyFord();
 
 		// Actually play the game.
 		runGame(input, game);

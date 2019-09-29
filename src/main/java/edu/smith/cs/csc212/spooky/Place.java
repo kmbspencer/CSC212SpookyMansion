@@ -26,6 +26,10 @@ public class Place {
 	 * Whether reaching this place ends the game.
 	 */
 	private boolean terminal;
+	/**
+	 * False until player visits place
+	 */
+	private boolean visited = false;
 	
 	/**
 	 * Internal only constructor for Place. Use {@link #create(String, String)} or {@link #terminal(String, String)} instead.
@@ -46,6 +50,11 @@ public class Place {
 	 */
 	public void addExit(Exit exit) {
 		this.exits.add(exit);
+	}
+	
+	public void visit() {
+		visited = true;
+		description = "This feels familiar...\n"+description;
 	}
 	
 	/**
