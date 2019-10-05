@@ -1,6 +1,7 @@
 package edu.smith.cs.csc212.spooky;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class Place {
 	 */
 	private boolean visited = false;
 	
+	
 	/**
 	 * Internal only constructor for Place. Use {@link #create(String, String)} or {@link #terminal(String, String)} instead.
 	 * @param id - the internal id of this place.
@@ -51,10 +53,47 @@ public class Place {
 	public void addExit(Exit exit) {
 		this.exits.add(exit);
 	}
+	/**
+	 * Create a secret exit for the user to navigate to another Place.
+	 * @param exit - the description and target of the other Place.
+	 * 
+	 */
+	public void addSecretExit(SecretExit secretExit) {
+		
+		this.exits.add(secretExit);
 	
+	}
+	/**
+	 * Create a Locked exit for the user to navigate to another Place.
+	 * user needs key to access
+	 * @param exit - the description and target of the other Place.
+	 * 
+	 */
+	public void addLockedExit(LockedExit lockedExit) {
+		
+		this.exits.add(lockedExit);
+	
+	}
+	/**
+	 * Create a Secret and Locked exit for the user to navigate to another Place.
+	 * user needs key to access
+	 * @param exit - the description and target of the other Place.
+	 * 
+	 */
+	public void addSecretLockedExit(SecretLockedExit sLockedExit) {
+		
+		this.exits.add(sLockedExit);
+	
+	}
+	/**
+	 * Marks a location "visited" if the user has been there before, and adds "This feels familiar" to the start of the description
+	 */
 	public void visit() {
 		visited = true;
-		description = "This feels familiar...\n"+description;
+		if(!(getDescription().contains("This feels familiar..."))){
+			description = "This feels familiar...\n"+description;
+		}
+		
 	}
 	
 	/**
@@ -80,6 +119,25 @@ public class Place {
 	public String getDescription() {
 		return this.description;
 	}
+	/**
+	 * Assume: only called on places with items
+	 * @return a string of the item in the place. Defined by saying There is a (item). at the end of the description
+	 */
+	public String items(){
+		//Goal: find out if there is the phrase "there is a" in the description, if so, seperate and add return,
+		//if not return null
+		int index = getDescription().lastIndexOf(" a ");
+		String item = getDescription().substring(index+1,(getDescription().length()-1));
+		return item;
+		
+	}
+	/**
+	 * removes the "There is a (item)" from the end of description
+	 */
+	public void removeItem() {
+		description = description.replace(this.items()," ");
+		description = description.replace(" There is  .", "");
+	}
 
 	/**
 	 * Get a view of the exits from this Place, for navigation.
@@ -88,9 +146,19 @@ public class Place {
 	public List<Exit> getVisibleExits() {
 		List<Exit> visible = new ArrayList<>();
 		for (Exit e : this.exits) {
-			visible.add(e);
+			if(e.isSecret()==false) {
+				//System.out.println(e.isSecret()+e.getTarget());
+				visible.add(e);
+			}
 		}
 		return visible;
+	}
+	/**
+	 * 
+	 * @return list of all exits from a place
+	 */
+	public List<Exit> getAllExits(){
+		return this.exits;
 	}
 	
 	/**
@@ -112,6 +180,9 @@ public class Place {
 	public static Place create(String id, String description) {
 		return new Place(id, description, false);
 	}
+	/**public static Place create(String id, String description, String item) {
+		return new Place(id, description, item);
+	}**/
 	
 	/**
 	 * Implements what we need to put Place in a HashSet or HashMap.
@@ -126,6 +197,7 @@ public class Place {
 	public String toString() {
 		return "Place("+this.id+" with "+this.exits.size()+" exits.)";
 	}
+		
 	
 	/**
 	 * Whether this is the same place as another.
@@ -136,5 +208,6 @@ public class Place {
 		}
 		return false;
 	}
+
 	
 }

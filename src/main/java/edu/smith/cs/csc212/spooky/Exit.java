@@ -1,5 +1,6 @@
 package edu.smith.cs.csc212.spooky;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -26,6 +27,18 @@ public class Exit {
 		this.description = description;
 		this.target = target;
 	}
+	/**
+	 * Ensures that the exit shows when it isn't secret
+	 */
+	boolean hidden = false;
+	/**
+	 * Shows that the door is unlocked
+	 */
+	boolean locked = false;
+	/**
+	 * normal exits don't need a key to open
+	 */
+	public String key;
 	
 	/**
 	 * A getter for the description of this exit.
@@ -74,6 +87,55 @@ public class Exit {
 			Exit rhs = (Exit) other;
 			return this.target.equals(rhs.target) && this.description.equals(rhs.description); 
 		}
+		return false;
+	}
+	/**
+	 * @return bool of if the exit is secret or not
+	 */
+	public boolean isSecret() {
+		return this.hidden;
+	}
+	/**
+	 * search makes all methods that were hidden visible
+	 */
+	public void search() {
+		this.reveal();
+	}
+	/**
+	 * if the exit is hidden, reveal it
+	 */
+	public void reveal() {
+		this.hidden = false;
+	}
+	/**
+	 * sets locked to false
+	 */
+	public void unlock() {
+		this.locked = false;
+	}
+	/**
+	 * returns true if unlocked
+	 */
+	public boolean unlocked() {
+		return !this.locked;
+	}
+	/**
+	 * returns the key needed to unlock
+	 */
+	public String getKey() {
+		return this.key;
+	}
+	/**
+	 * if a door needs multiple keys, return the list
+	 */
+	public ArrayList<String> getListKey(){
+		return null;
+	}
+	/**
+	 * states if the exit is the final airplane building exit
+	 * ideally would be more nuanced and general
+	 */
+	public boolean isPlane() {
 		return false;
 	}
 }
